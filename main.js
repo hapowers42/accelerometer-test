@@ -37,7 +37,7 @@ Render.run(render);
 //called on accelerometer update
 function updateGravity() {
     //calculate yaw from accelerometer
-    let yaw = Math.atan(-acl.x, Math.sqrt(acl.y * acl.y + acl.z * acl.z)) * (180 / Math.PI) + 90;
+    let yaw = Math.atan2(-acl.x, Math.sqrt(acl.y * acl.y + acl.z * acl.z)) * (180 / Math.PI) + 90;
     //calculate x and y components of gravity
     gravity.x = -Math.cos(yaw * Math.PI / 180);
     gravity.y = Math.sin(yaw * Math.PI / 180);

@@ -1,16 +1,45 @@
 let acl = new Accelerometer({frequency: 60});
 
-acl.addEventListener('reading', () => {
-//   console.log("Acceleration along the X-axis " + acl.x);
-//   console.log("Acceleration along the Y-axis " + acl.y);
-//   console.log("Acceleration along the Z-axis " + acl.z);
-    // Roll = atan2(Y, Z) * 180/M_PI;
-    // Pitch = atan2(-X, sqrt(Y*Y + Z*Z)) * 180/M_PI;
-    //console.log('roll is ' + (Math.atan2(acl.y, acl.z) * 180/Math.PI));
-    let yaw = Math.atan(-acl.x, Math.sqrt(acl.y * acl.y + acl.z * acl.z)) * (180/Math.PI);
-    console.log('yaw is ' + yaw);
+let Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Bodies = Matter.Bodies;
+     
+let engine = Engine.create();
+let gravity = engine.world.gravity;
 
+let render = Render.create({
+                element: document.body,
+                engine: engine,
+                options: {
+                    width: 800,
+                    height: 400,
+                    wireframes: false
+                }
+             });
+              
+let boxA = Bodies.rectangle(400, 200, 80, 80);
+let ballA = Bodies.circle(380, 100, 40, 10);
+let ballB = Bodies.circle(460, 40, 40, 10);
+let ground = Bodies.rectangle(400, 380, 810, 60, { isStatic: true });
+let ceiling = Bodies.rectangle(400, 20, 810, 60, { isStatic: true });
+let wall1 = Bodies.rectangle(20, 200, 60, 410, {isStatic: true});
+let wall2 = Bodies.rectangle(780, 200, 60, 410, {isStatic: true});
+
+World.add(engine.world, [boxA, ballA, ballB, ground, ceiling, wall1, wall2]);
+ 
+Engine.run(engine);
+Render.run(render);
+
+function updateGravity(){
+    let yaw = Math.atan(-acl.x, Math.sqrt(acl.y * acl.y + acl.z * acl.z)) * (180/Math.PI)+ 90;
+    console.log('yaw is ' + yaw);
+    gravity.x = Math.cos(yaw * 180/Math.PI);
+    gravity.y = Math.cos(yaw * 180/Math.PI)
+    document.getElementById('debug').innerHTML = yaw;
 }
-);
+
+
+acl.addEventListener('reading', updateGravity);
 
 acl.start();

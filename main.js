@@ -33,12 +33,10 @@ Render.run(render);
 
 function updateGravity(){
     let yaw = Math.atan(-acl.x, Math.sqrt(acl.y * acl.y + acl.z * acl.z)) * (180/Math.PI)+ 90;
-    console.log('yaw is ' + yaw);
-    gravity.x = Math.cos(yaw * 180/Math.PI);
-    gravity.y = Math.cos(yaw * 180/Math.PI)
+    gravity.x = -Math.cos(yaw * Math.PI/180);
+    gravity.y = Math.sin(yaw * Math.PI/180);
     document.getElementById('debug').innerHTML = yaw;
 }
-
 
 acl.addEventListener('reading', updateGravity);
 
